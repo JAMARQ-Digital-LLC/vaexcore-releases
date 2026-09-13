@@ -44,6 +44,26 @@ const gh = (args, { allowFailure = false } = {}) => {
   }
 };
 
+// The feed's current manifest, or null when the feed has none yet.
+//
+// Only "not found" means null. A bad token or an outage is an error, so a run
+// cannot mistake it for "not published" and spend a Windows build finding out.
+const downloadManifest = (repo, tag, name) => {
+  try {
+    return execFileSync(
+      "gh",
+      ["release", "download", tag, "--repo", repo, "--pattern", name, "--output", "-"],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+  } catch (error) {
+    const said = String(error.stderr || error.message).trim();
+    if (/release not found|no assets? (match|to download)/i.test(said)) {
+      return null;
+    }
+    throw new Error(`could not read the ${tag} feed: ${said}`);
+  }
+};
+
 const output = (key, value) => {
   console.log(`${key}=${value}`);
   if (process.env.GITHUB_OUTPUT) {
@@ -58,6 +78,11 @@ const summary = (line) => {
 };
 
 function main() {
+  if (!input("GH_TOKEN", { required: false })) {
+    throw new Error(
+      "the token is empty: set VAEXCORE_RELEASES_TOKEN for this repository",
+    );
+  }
   const repo = input("RELEASES_REPO", { required: false }) || feed.RELEASES_REPO;
   const app = input("APP");
   const kind = input("KIND");
@@ -76,10 +101,7 @@ function main() {
 
   // Published means the feed already offers this version, not merely that its
   // release exists: a run that failed between the two has to be able to finish.
-  const current = gh(
-    ["release", "download", feedTag, "--repo", repo, "--pattern", manifestName, "--output", "-"],
-    { allowFailure: true },
-  );
+  const current = downloadManifest(repo, feedTag, manifestName);
   const feedVersion = current === null ? null : feed.manifestVersion(kind, current);
   if (input("CHECK_ONLY", { required: false }) === "true") {
     output("published", String(feedVersion === version));
