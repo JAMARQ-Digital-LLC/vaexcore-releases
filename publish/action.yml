@@ -1,0 +1,65 @@
+name: Publish a vaexcore update
+description: >-
+  Publish an installer to vaexcore-releases and point the app's update feed at
+  it. With check-only, report whether the feed already offers the version.
+
+inputs:
+  app:
+    description: studio, pulse, console or suite
+    required: true
+  kind:
+    description: tauri (latest.json) or electron (latest.yml)
+    required: true
+  version:
+    description: MAJOR.MINOR.PATCH
+    required: true
+  token:
+    description: A token that can write releases in vaexcore-releases
+    required: true
+  check-only:
+    description: Report whether this version is already published, and publish nothing
+    required: false
+    default: "false"
+  installer:
+    description: Path to the NSIS installer
+    required: false
+    default: ""
+  signature:
+    description: Path to the installer's updater signature (tauri)
+    required: false
+    default: ""
+  electron-manifest:
+    description: Path to the latest.yml electron-builder wrote (electron)
+    required: false
+    default: ""
+  notes:
+    description: Release notes shown by the updater
+    required: false
+    default: ""
+  keep:
+    description: How many versioned releases of this app to keep
+    required: false
+    default: "10"
+
+outputs:
+  published:
+    description: "true when the feed offers this version"
+    value: ${{ steps.publish.outputs.published }}
+
+runs:
+  using: composite
+  steps:
+    - id: publish
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        APP: ${{ inputs.app }}
+        KIND: ${{ inputs.kind }}
+        VERSION: ${{ inputs.version }}
+        CHECK_ONLY: ${{ inputs.check-only }}
+        INSTALLER: ${{ inputs.installer }}
+        SIGNATURE: ${{ inputs.signature }}
+        ELECTRON_MANIFEST: ${{ inputs.electron-manifest }}
+        NOTES: ${{ inputs.notes }}
+        KEEP: ${{ inputs.keep }}
+      run: node "$GITHUB_ACTION_PATH/publish.mjs"
