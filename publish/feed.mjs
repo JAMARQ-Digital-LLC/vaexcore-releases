@@ -5,7 +5,19 @@
 
 export const RELEASES_REPO = "JAMARQ-Digital-LLC/vaexcore-releases";
 
-export const APPS = ["studio", "pulse", "console", "suite"];
+export const APPS = ["studio", "pulse", "vaexbot", "suite"];
+
+/**
+ * Feeds an app's manifest is also written to, by app.
+ *
+ * Console was renamed Vaexbot on 2026-10-01. Installs from before the rename
+ * read console-latest, so Vaexbot's manifest is written there too; the first
+ * update installs a build that reads vaexbot-latest. Remove the entry once no
+ * install is left on a pre-Vaexbot build.
+ */
+export const FEED_MIRRORS = { vaexbot: ["console"] };
+
+export const mirrorFeedTags = (app) => (FEED_MIRRORS[app] ?? []).map(feedTag);
 
 /** The two manifest formats, by the updater that reads them. */
 export const MANIFEST_NAMES = {
@@ -50,7 +62,7 @@ export const feedTag = (app) => `${app}-latest`;
  * manifest would then point at a file that does not exist.
  */
 export const installerAssetName = (app, version) =>
-  `vaexcore-${app}-${version}-x64-setup.exe`;
+  `${app === "vaexbot" ? app : `vaexcore-${app}`}-${version}-x64-setup.exe`;
 
 export const assetUrl = (repo, tag, name) =>
   `https://github.com/${repo}/releases/download/${tag}/${encodeURIComponent(name)}`;

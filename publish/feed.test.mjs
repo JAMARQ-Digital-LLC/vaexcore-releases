@@ -7,6 +7,7 @@ import {
   feedTag,
   installerAssetName,
   manifestVersion,
+  mirrorFeedTags,
   releaseTag,
   releasesToPrune,
   tauriManifest,
@@ -16,8 +17,14 @@ const repo = "JAMARQ-Digital-LLC/vaexcore-releases";
 
 test("each build and each feed has a tag of its own", () => {
   assert.equal(releaseTag("studio", "0.1.311"), "studio-v0.1.311");
-  assert.equal(feedTag("console"), "console-latest");
+  assert.equal(feedTag("vaexbot"), "vaexbot-latest");
   assert.equal(installerAssetName("pulse", "0.2.116"), "vaexcore-pulse-0.2.116-x64-setup.exe");
+  assert.equal(installerAssetName("vaexbot", "0.1.188"), "vaexbot-0.1.188-x64-setup.exe");
+});
+
+test("Vaexbot's manifest also reaches installs from before the rename", () => {
+  assert.deepEqual(mirrorFeedTags("vaexbot"), ["console-latest"]);
+  assert.deepEqual(mirrorFeedTags("studio"), []);
 });
 
 test("only a three-part numeric version is accepted", () => {
@@ -51,20 +58,20 @@ test("a Tauri manifest refuses an empty signature", () => {
 const latestYml = [
   "version: 0.1.187",
   "files:",
-  "  - url: vaexcore-console-0.1.187-x64-setup.exe",
+  "  - url: vaexbot-0.1.187-x64-setup.exe",
   "    sha512: abc==",
   "    size: 90000000",
-  "path: vaexcore-console-0.1.187-x64-setup.exe",
+  "path: vaexbot-0.1.187-x64-setup.exe",
   "sha512: abc==",
   "releaseDate: '2026-09-13T00:00:00.000Z'",
   "",
 ].join("\r\n");
 
 test("an Electron manifest points every installer reference at the release", () => {
-  const url = assetUrl(repo, "console-v0.1.187", "vaexcore-console-0.1.187-x64-setup.exe");
+  const url = assetUrl(repo, "vaexbot-v0.1.187", "vaexbot-0.1.187-x64-setup.exe");
   const rewritten = electronManifest(latestYml, {
     version: "0.1.187",
-    fileName: "vaexcore-console-0.1.187-x64-setup.exe",
+    fileName: "vaexbot-0.1.187-x64-setup.exe",
     url,
   });
   assert.match(rewritten, new RegExp(`^  - url: ${url}$`, "m"));
@@ -74,7 +81,7 @@ test("an Electron manifest points every installer reference at the release", () 
 });
 
 test("an Electron manifest for another version or file is refused", () => {
-  const options = { version: "0.1.187", fileName: "vaexcore-console-0.1.187-x64-setup.exe", url: "u" };
+  const options = { version: "0.1.187", fileName: "vaexbot-0.1.187-x64-setup.exe", url: "u" };
   assert.throws(() => electronManifest(latestYml, { ...options, version: "0.1.188" }));
   assert.throws(() => electronManifest(latestYml, { ...options, fileName: "other.exe" }));
   assert.throws(() => electronManifest("version: 0.1.187\n", options));
