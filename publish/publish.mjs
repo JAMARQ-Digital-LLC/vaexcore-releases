@@ -161,16 +161,19 @@ function main() {
     ]);
   }
 
-  if (releaseExists(feedTag)) {
-    gh(["release", "upload", feedTag, manifestPath, "--repo", repo, "--clobber"]);
-  } else {
-    gh([
-      "release", "create", feedTag, manifestPath,
-      "--repo", repo,
-      "--title", `vaexcore ${app} update feed`,
-      "--notes", `The manifest installed copies of vaexcore ${app} read. Installers are in the ${app}-v* releases.`,
-      "--latest=false",
-    ]);
+  // The app's own feed first, then any feed older installs still read.
+  for (const tag of [feedTag, ...feed.mirrorFeedTags(app)]) {
+    if (releaseExists(tag)) {
+      gh(["release", "upload", tag, manifestPath, "--repo", repo, "--clobber"]);
+    } else {
+      gh([
+        "release", "create", tag, manifestPath,
+        "--repo", repo,
+        "--title", `vaexcore ${app} update feed`,
+        "--notes", `The manifest installed copies of vaexcore ${app} read. Installers are in the ${app}-v* releases.`,
+        "--latest=false",
+      ]);
+    }
   }
 
   const keep = Number.parseInt(input("KEEP", { required: false }) || "10", 10);

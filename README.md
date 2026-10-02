@@ -12,7 +12,7 @@ to `main` that passes CI and publishes through the action in [`publish/`](publis
 | --- | --- |
 | vaexcore studio | `https://github.com/JAMARQ-Digital-LLC/vaexcore-releases/releases/download/studio-latest/latest.json` |
 | vaexcore pulse | `https://github.com/JAMARQ-Digital-LLC/vaexcore-releases/releases/download/pulse-latest/latest.json` |
-| vaexcore console | `https://github.com/JAMARQ-Digital-LLC/vaexcore-releases/releases/download/console-latest/latest.yml` |
+| Vaexbot | `https://github.com/JAMARQ-Digital-LLC/vaexcore-releases/releases/download/vaexbot-latest/latest.yml` |
 | vaexcore suite | `https://github.com/JAMARQ-Digital-LLC/vaexcore-releases/releases/download/suite-latest/latest.json` |
 
 ## Releases
@@ -24,8 +24,14 @@ to `main` that passes CI and publishes through the action in [`publish/`](publis
   has not finished uploading.
 
 To install an app for the first time, download the newest
-`vaexcore-<app>-<version>-x64-setup.exe` from its `<app>-v*` release. From then on
-it updates itself.
+`vaexcore-<app>-<version>-x64-setup.exe` (Vaexbot: `vaexbot-<version>-x64-setup.exe`)
+from its `<app>-v*` release. From then on it updates itself.
+
+Vaexbot was vaexcore console until 2026-10-01. Its manifest is also written to
+`console-latest`, which installs from before the rename read, so they update
+onto Vaexbot and from then on read `vaexbot-latest`. The mirror is
+`FEED_MIRRORS` in `publish/feed.mjs`; remove it once no install is left on a
+pre-Vaexbot build.
 
 ## Versions
 
@@ -36,7 +42,7 @@ newer than the last, and a change to docs or CI alone does not publish anything.
 ## Signing
 
 Tauri updates (studio, pulse, suite) are signed with the suite's minisign key,
-and the apps refuse an update that does not verify. Console's updates are checked
+and the apps refuse an update that does not verify. Vaexbot's updates are checked
 against the SHA-512 in its manifest.
 
 The installers are not yet Authenticode-signed. Windows may warn before running

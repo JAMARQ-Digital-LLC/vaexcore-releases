@@ -5,7 +5,7 @@ description: >-
 
 inputs:
   app:
-    description: studio, pulse, console or suite
+    description: studio, pulse, vaexbot or suite
     required: true
   kind:
     description: tauri (latest.json) or electron (latest.yml)
