@@ -22,8 +22,8 @@ test("each build and each feed has a tag of its own", () => {
   assert.equal(installerAssetName("vaexbot", "0.1.188"), "vaexbot-0.1.188-x64-setup.exe");
 });
 
-test("Vaexbot's manifest also reaches installs from before the rename", () => {
-  assert.deepEqual(mirrorFeedTags("vaexbot"), ["console-latest"]);
+test("no app's manifest is mirrored to another feed", () => {
+  assert.deepEqual(mirrorFeedTags("vaexbot"), []);
   assert.deepEqual(mirrorFeedTags("studio"), []);
 });
 

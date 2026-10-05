@@ -27,11 +27,13 @@ To install an app for the first time, download the newest
 `vaexcore-<app>-<version>-x64-setup.exe` (Vaexbot: `vaexbot-<version>-x64-setup.exe`)
 from its `<app>-v*` release. From then on it updates itself.
 
-Vaexbot was vaexcore console until 2026-10-01. Its manifest is also written to
-`console-latest`, which installs from before the rename read, so they update
-onto Vaexbot and from then on read `vaexbot-latest`. The mirror is
-`FEED_MIRRORS` in `publish/feed.mjs`; remove it once no install is left on a
-pre-Vaexbot build.
+Vaexbot was vaexcore console until 2026-10-01. Until 2026-10-05 its manifest
+was also written to `console-latest`, which installs from before the rename
+read, so they updated onto Vaexbot and from then on read `vaexbot-latest`. The
+mirror was removed once the last such install was confirmed on the new feed.
+The `console-latest` release stays, frozen on that build, so a straggler still
+updates onto Vaexbot. `FEED_MIRRORS` in `publish/feed.mjs` is where a mirror
+would go after a future rename.
 
 ## Versions
 

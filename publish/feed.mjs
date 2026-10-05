@@ -10,12 +10,12 @@ export const APPS = ["studio", "pulse", "vaexbot", "suite"];
 /**
  * Feeds an app's manifest is also written to, by app.
  *
- * Console was renamed Vaexbot on 2026-10-01. Installs from before the rename
- * read console-latest, so Vaexbot's manifest is written there too; the first
- * update installs a build that reads vaexbot-latest. Remove the entry once no
- * install is left on a pre-Vaexbot build.
+ * Empty since 2026-10-05. Vaexbot's manifest was mirrored to console-latest
+ * for installs from before the 2026-10-01 rename; the last one was confirmed
+ * reading vaexbot-latest. The console-latest release is left in place, frozen
+ * on that build, so a straggler still updates onto Vaexbot.
  */
-export const FEED_MIRRORS = { vaexbot: ["console"] };
+export const FEED_MIRRORS = {};
 
 export const mirrorFeedTags = (app) => (FEED_MIRRORS[app] ?? []).map(feedTag);
 
