@@ -1,0 +1,22 @@
+Copyright (c) 2026 JAMARQ Digital LLC. All rights reserved.
+
+This repository holds the installers, update manifests and publishing tooling
+for the Vaexcore desktop applications (Vaexcore Studio, Vaexcore Pulse,
+Vaexbot and the Vaexcore suite). The applications' source code is private and
+is not part of this repository.
+
+You may download the installers published in this repository's releases and
+use the applications they install. Installed copies may fetch updates from the
+feeds published here.
+
+No other rights are granted. You may not modify, redistribute, sublicense or
+sell the installers, the update manifests, or the publishing tooling in this
+repository, or create derivative works from them, without written permission
+from JAMARQ Digital LLC.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL JAMARQ
+DIGITAL LLC BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

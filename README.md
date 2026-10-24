@@ -56,3 +56,9 @@ Copy the manifest from the release you want to go back to into that app's
 `<app>-latest` release, replacing the one there. Installed copies only move
 forward, so this stops newer installs from updating further but does not
 downgrade anyone.
+
+## License
+
+The installers and tooling here are proprietary; see [LICENSE](LICENSE). The
+repository is public only so installed apps can read their update feeds without a
+token.
